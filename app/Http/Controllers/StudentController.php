@@ -41,8 +41,18 @@ class StudentController extends Controller
         return view('students.edit', $data);
     }
 
-    public function destroy(){
+    public function destroy($nis, Request $request){
+        DB::beginTransaction();
 
+        DB::delete("
+            DELETE FROM students
+            WHERE 
+            nis = ? 
+        ", [$nis]);
+
+        DB::commit();
+
+        return redirect()->to('/students')->with('success','Student deleted successfully.');
     }
 
     public function store(Request $request)
